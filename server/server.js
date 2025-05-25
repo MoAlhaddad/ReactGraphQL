@@ -1,6 +1,7 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer }  from  "@apollo/server/standalone";
 import { connectDB } from "./db.js";
+import { User } from "./models/User.js";
 
 const users = [
     {
@@ -36,54 +37,126 @@ const users = [
   ];
 
 
-const typeDefs = `
-    type Query {
-     getUsers: [User]
-     getUserById(id: ID!): User
-    }
+// const typeDefs = `
+//     type Query {
+//      getUsers: [User]
+//      getUserById(id: ID!): User
+//     }
 
-    type Mutation {
-        createUser(name: String!, age: Int!, isMarried: Boolean!): User
-    }
+//     type Mutation {
+//         createUser(name: String!, age: Int!, isMarried: Boolean!): User
+//     }
 
-    type User {
+//     type User {
     
-        id: ID
-        name: String
-        age: Int
-        isMarried: Boolean
+//         id: ID
+//         name: String
+//         age: Int
+//         isMarried: Boolean
 
-    }
+//     }
+// `;
+
+const typeDefs = `
+  type Query {
+    getUsers: [User]
+    getUserById(id: ID!): User
+  }
+
+  type Mutation {
+    createUser(
+      name: String!
+      age: Int!
+      isMarried: Boolean!
+      email: String!
+      phone: String!
+      position: String!
+      department: String!
+      dateOfHire: String!
+      address: String!
+      ssn: String!
+      bankAccount: String!
+      photoUrl: String!
+    ): User
+  }
+
+  type User {
+    id: ID
+    name: String
+    age: Int
+    isMarried: Boolean
+    email: String
+    phone: String
+    position: String
+    department: String
+    dateOfHire: String
+    address: String
+    ssn: String
+    bankAccount: String
+    photoUrl: String
+  }
 `;
+// const resolvers = {
+
+//     Query: {
+//         getUsers: () => {
+//             return users;
+//         },
+//         getUserById: (parent, args) => {
+//             const id = args.id
+//             return users.find((user) => user.id === id);
+//         }
+
+//     },
+
+//     Mutation: {
+//         createUser: (parent, args) => {
+//             const {name, age, isMarried} = args;
+//             const newUser = {
+//                 id: (users.length + 1).toString(),
+//                 name,
+//                 age,
+//                 isMarried,
+//             };
+//             console.log(newUser);
+//             users.push(newUser);
+//             return newUser;
+//         },
+//     },
+// };
 const resolvers = {
-
     Query: {
-        getUsers: () => {
-            return users;
-        },
-        getUserById: (parent, args) => {
-            const id = args.id
-            return users.find((user) => user.id === id);
-        }
-
+      getUsers: async () => {
+        return await User.find(); // MongoDB now
+      },
+      getUserById: async (_, args) => {
+        return await User.findById(args.id);
+      },
     },
-
+  
     Mutation: {
-        createUser: (parent, args) => {
-            const {name, age, isMarried} = args;
-            const newUser = {
-                id: (users.length + 1).toString(),
-                name,
-                age,
-                isMarried,
-            };
-            console.log(newUser);
-            users.push(newUser);
-            return newUser;
-        },
+      createUser: async (_, args) => {
+        const newUser = new User({
+          name: args.name,
+          age: args.age,
+          isMarried: args.isMarried,
+          email: args.email,
+          phone: args.phone,
+          position: args.position,
+          department: args.department,
+          dateOfHire: args.dateOfHire,
+          address: args.address,
+          ssn: args.ssn,
+          bankAccount: args.bankAccount,
+          photoUrl: args.photoUrl,
+        });
+  
+        await newUser.save();
+        console.log("New user created:", newUser);
+        return newUser;
+      },
     },
-};
-
+  };
 async function startServer() {
     try {
       await connectDB(); // Connect to MongoDB first
