@@ -1,5 +1,6 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer }  from  "@apollo/server/standalone";
+import { connectDB } from "./db.js";
 
 const users = [
     {
@@ -78,20 +79,45 @@ const resolvers = {
             };
             console.log(newUser);
             users.push(newUser);
+            return newUser;
         },
     },
 };
 
-const server = new ApolloServer({
-    typeDefs,
-    resolvers
-});
+async function startServer() {
+    try {
+      await connectDB(); // Connect to MongoDB first
+      console.log("Connected to MongoDB");
+  
+      const server = new ApolloServer({
+        typeDefs,
+        resolvers,
+      });
+  
+      const { url } = await startStandaloneServer(server, {
+        listen: { port: 5000 },
+      });
+  
+      console.log(`Server Running at ${url}`);
+    } catch (error) {
+      console.error("Failed to start server:", error);
+      process.exit(1);
+    }
+  }
+  
+  startServer();
+  
 
-const { url } = await startStandaloneServer(server, {
-    listen: {port: 5000},
-});
+// const server = new ApolloServer({
+//     typeDefs,
+//     resolvers
+// });
 
-console.log(`Server Running at ${url}`);
+// const { url } = await startStandaloneServer(server, {
+//     listen: {port: 5000},
+// });
+
+
 
 
 
