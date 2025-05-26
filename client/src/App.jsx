@@ -1,113 +1,60 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { ThemeProvider } from "./contexts/theme-context";
 
-import { useState } from 'react';
-import './App.css'
-import {useQuery, useMutation, gql} from "@apollo/client";
-
-const GET_USERS = gql`
-query getUsers {
-  getUsers {
-   
-    age,
-    name,
-    isMarried,
-    position,
-    photoUrl
-
-  }
-}
-
-`
-const GET_USER = gql`
-query getUserById($id: ID!) {
-  getUserById(id: $id) {
-    id
-    age
-    name
-    isMarried
-
-  }
-}`
-;
-
-const CREATE_USER =gql`
-mutation CreateUser($name: String!, $age: Int!, $isMarried: Boolean!){
-  createUser(name: $name, age: $age, isMarried: $isMarried){
-    id
-    age
-    name
-    isMarried
-  }
-}
-`
+import Layout from "./routes/layout";
+import DashboardPage from "./routes/dashboard/page";
 
 function App() {
+    const router = createBrowserRouter([
+        {
+            path: "/",
+            element: <Layout />,
+            children: [
+                {
+                    index: true,
+                    element: <DashboardPage />,
+                },
+                {
+                    path: "onboarding",
+                    element: <h1 className="title">Onboarding Progress</h1>,
+                },
+                {
+                    path: "reports",
+                    element: <h1 className="title">Reports</h1>,
+                },
+                {
+                    path: "employees",
+                    element: <h1 className="title">All Employees</h1>,
+                },
+                {
+                    path: "new-employee",
+                    element: <h1 className="title">New Employee</h1>,
+                },
+                {
+                    path: "verified-employees",
+                    element: <h1 className="title">Verified Employees</h1>,
+                },
+                {
+                    path: "departments",
+                    element: <h1 className="title">Departments</h1>,
+                },
+                {
+                    path: "new-department",
+                    element: <h1 className="title">New Department</h1>,
+                },
+                {
+                    path: "settings",
+                    element: <h1 className="title">Settings</h1>,
+                },
+            ],
+        },
+    ]);
 
-  const [newUser, setUser] = useState({});
-
-  const {data: getUsersData, error: getUsersError, loading: getUsersLoading} = useQuery(GET_USERS);
-  const {data: getUserByIdData, error: getUserByIdError, loading: getUserByIdLoading} = useQuery(GET_USER, {
-  variables: {id: "3"}
-  });
-
-  const [createUser] = useMutation(CREATE_USER)
-  const handleCreateUser = async() => {
-    console.log(newUser)
-    createUser({variables: {name: newUser.name, age: Number(newUser.age), isMarried: false}})
-  }
-
-  if (getUsersLoading) return <p> Data loading....</p>
-
-  if(getUsersError) return <p>{error.message}</p>;
- 
-
-  return (
-    <>
-  <div>
-    <input placeholder="Name..." onChange={(e) => setUser((prev) => ({...prev, name: e.target.value}))}/>
-    <input placeholder="Age..." type="number" onChange={(e) => setUser((prev) => ({...prev, age: e.target.value}))} />
-    <button onClick={handleCreateUser}>Create User</button>
-  </div>
-
-
-      <h1>Users </h1>
-
-<div>
-  { getUserByIdLoading ? (<p>loading user....</p>) :(
-<>
-<h1>Chosen User: </h1>
-{/* <p>{getUserByIdData.getUserById.name}</p>
-<p>{getUserByIdData.getUserById.age}</p> */}
-
-</>)}
-  
-</div>
-<h1>Users</h1>
-      <div>
-        {""}
-{getUsersData.getUsers.map((user)  => (
-
-  <div>
-      <p>
-        Name: {user.name}
-      </p>
-      <p>
-        Married: {user.isMarried ? "Yes": "No" }
-      </p>
-      <p>
-        age: {user.age}
-      </p>
-      <p>
-        position: {user.position}
-      </p>
-      <div>
-        <img alt="Profile" src={user.photoUrl} />
-      </div>
-     
-    </div>
-))}
-      </div>
-    </>
-  )
+    return (
+        <ThemeProvider storageKey="theme">
+            <RouterProvider router={router} />
+        </ThemeProvider>
+    );
 }
 
-export default App
+export default App;
