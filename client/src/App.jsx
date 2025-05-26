@@ -9,7 +9,9 @@ query getUsers {
    
     age,
     name,
-    isMarried
+    isMarried,
+    position,
+    photoUrl
 
   }
 }
@@ -73,8 +75,8 @@ function App() {
   { getUserByIdLoading ? (<p>loading user....</p>) :(
 <>
 <h1>Chosen User: </h1>
-<p>{getUserByIdData.getUserById.name}</p>
-<p>{getUserByIdData.getUserById.age}</p>
+{/* <p>{getUserByIdData.getUserById.name}</p>
+<p>{getUserByIdData.getUserById.age}</p> */}
 
 </>)}
   
@@ -94,6 +96,12 @@ function App() {
       <p>
         age: {user.age}
       </p>
+      <p>
+        position: {user.position}
+      </p>
+      <div>
+        <img alt="Profile" src={user.photoUrl} />
+      </div>
      
     </div>
 ))}
