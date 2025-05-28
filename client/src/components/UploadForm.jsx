@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 export default function EmployeePhotoUploader() {
   const [imageUrl, setImageUrl] = useState("");
   const [uploading, setUploading] = useState(false);
+  const navigate = useNavigate();
 
   // Form fields state
   const [form, setForm] = useState({
@@ -131,6 +134,8 @@ export default function EmployeePhotoUploader() {
       } else {
         alert("User created successfully!");
         // Optionally reset form here
+        navigate("/");
+
       }
     } catch (error) {
       alert("Submission error: " + error.message);
