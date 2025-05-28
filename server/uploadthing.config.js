@@ -1,1 +1,0 @@
-import { createUploadthing } from "uploadthing/server";

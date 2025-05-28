@@ -43,7 +43,7 @@ export default function EmployeePhotoUploader() {
 
       try {
         const res = await fetch(
-          `https://api.imgbb.com/1/upload?key=040921fe37f28000f2e08881d5004e53`,
+          `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`,
           {
             method: "POST",
             headers: {
