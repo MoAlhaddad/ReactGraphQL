@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 
 import { NAV_ITEMS } from "../constants";
 
+import logo from "../assets/choosescribe_logo.jpeg"
 // import logoLight from "/assets/logo-light.svg";
 // import logoDark from "/assets/logo-dark.svg";
 import { cn } from "../utils/cn";
@@ -20,16 +21,12 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
         >
             <div className="flex gap-x-3 p-3">
                 <img
-                   
-                    alt="Logoipsum"
+                    src={logo}
+                    alt="choosescribe"
                     className="dark:hidden"
                 />
-                <img
-                    
-                    alt="Logoipsum"
-                    className="hidden dark:block"
-                />
-                {!collapsed && <p className="text-lg font-medium text-slate-900 transition-colors dark:text-slate-50">Logoipsum</p>}
+                
+              
             </div>
             <div className="flex w-full flex-col gap-y-4 overflow-y-auto overflow-x-hidden p-3 [scrollbar-width:_thin]">
                 {NAV_ITEMS.map((NAVITEM) => (

@@ -33,9 +33,6 @@ const UserSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
-    isMarried: {
-      type: Boolean,
-    },
     address: {
       type: String,
     },
@@ -46,7 +43,7 @@ const UserSchema = new mongoose.Schema(
       type: String, // mock sensitive data
     },
     photoUrl: {
-      type: String, // uploaded via Uploadthing
+      type: String, // url we need from  imgbb
     },
   },
   { timestamps: true }

@@ -3,6 +3,7 @@ import { ThemeProvider } from "./contexts/theme-context";
 
 import Layout from "./routes/layout";
 import DashboardPage from "./routes/dashboard/page";
+import NewEmployeePage from "./routes/new-employee/page";
 
 function App() {
     const router = createBrowserRouter([
@@ -28,7 +29,7 @@ function App() {
                 },
                 {
                     path: "new-employee",
-                    element: <h1 className="title">New Employee</h1>,
+                    element: <NewEmployeePage/>
                 },
                 {
                     path: "verified-employees",

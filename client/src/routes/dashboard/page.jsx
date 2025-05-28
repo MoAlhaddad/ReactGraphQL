@@ -8,24 +8,20 @@ import {
   } from "recharts";
   import { useQuery } from "@apollo/client";
   import { GET_USERS } from "../../graphql/queries";
-  
   import { useTheme } from "../../hooks/use-theme";
   import { Footer } from "../../layouts/footer";
   
   import {
-    CreditCard,
-    DollarSign,
-    Package,
+    CalendarCheck,
+    ClipboardList,
+    UserCog,
     PencilLine,
-    Star,
     Trash,
     TrendingUp,
-    Users,
   } from "lucide-react";
   
   const DashboardPage = () => {
     const { theme } = useTheme();
-  
     const { data, loading, error } = useQuery(GET_USERS);
   
     return (
@@ -34,64 +30,64 @@ import {
   
         {/* Cards Section */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {/* Products */}
+          {/* Total Scheduled Tasks */}
           <div className="card">
             <div className="card-header">
               <div className="w-fit rounded-lg bg-blue-500/20 p-2 text-blue-500 dark:bg-blue-600/20 dark:text-blue-600">
-                <Package size={26} />
+                <ClipboardList size={26} />
               </div>
-              <p className="card-title">Total Products</p>
+              <p className="card-title">Scheduled Tasks</p>
             </div>
             <div className="card-body bg-slate-100 dark:bg-slate-950">
-              <p className="text-3xl font-bold text-slate-900 dark:text-slate-50">25,154</p>
+              <p className="text-3xl font-bold text-slate-900 dark:text-slate-50">25</p>
               <span className="flex items-center gap-x-2 rounded-full border border-blue-500 px-2 py-1 text-blue-500 dark:border-blue-600 dark:text-blue-600">
                 <TrendingUp size={18} /> 25%
               </span>
             </div>
           </div>
   
-          {/* Paid Orders */}
+          {/* Completed Projects */}
           <div className="card">
             <div className="card-header">
               <div className="rounded-lg bg-blue-500/20 p-2 text-blue-500 dark:bg-blue-600/20 dark:text-blue-600">
-                <DollarSign size={26} />
+                <CalendarCheck size={26} />
               </div>
-              <p className="card-title">Total Paid Orders</p>
+              <p className="card-title">Completed Projects</p>
             </div>
             <div className="card-body bg-slate-100 dark:bg-slate-950">
-              <p className="text-3xl font-bold text-slate-900 dark:text-slate-50">$16,000</p>
+              <p className="text-3xl font-bold text-slate-900 dark:text-slate-50">16</p>
               <span className="flex items-center gap-x-2 rounded-full border border-blue-500 px-2 py-1 text-blue-500 dark:border-blue-600 dark:text-blue-600">
                 <TrendingUp size={18} /> 12%
               </span>
             </div>
           </div>
   
-          {/* Customers */}
+          {/* Active Staff */}
           <div className="card">
             <div className="card-header">
               <div className="rounded-lg bg-blue-500/20 p-2 text-blue-500 dark:bg-blue-600/20 dark:text-blue-600">
-                <Users size={26} />
+                <UserCog size={26} />
               </div>
-              <p className="card-title">Total Customers</p>
+              <p className="card-title">Active Staff</p>
             </div>
             <div className="card-body bg-slate-100 dark:bg-slate-950">
-              <p className="text-3xl font-bold text-slate-900 dark:text-slate-50">15,400k</p>
+              <p className="text-3xl font-bold text-slate-900 dark:text-slate-50">42</p>
               <span className="flex items-center gap-x-2 rounded-full border border-blue-500 px-2 py-1 text-blue-500 dark:border-blue-600 dark:text-blue-600">
                 <TrendingUp size={18} /> 15%
               </span>
             </div>
           </div>
   
-          {/* Sales */}
+          {/* Scheduled Events */}
           <div className="card">
             <div className="card-header">
               <div className="rounded-lg bg-blue-500/20 p-2 text-blue-500 dark:bg-blue-600/20 dark:text-blue-600">
-                <CreditCard size={26} />
+                <CalendarCheck size={26} />
               </div>
-              <p className="card-title">Sales</p>
+              <p className="card-title">Upcoming Events</p>
             </div>
             <div className="card-body bg-slate-100 dark:bg-slate-950">
-              <p className="text-3xl font-bold text-slate-900 dark:text-slate-50">12,340</p>
+              <p className="text-3xl font-bold text-slate-900 dark:text-slate-50">12</p>
               <span className="flex items-center gap-x-2 rounded-full border border-blue-500 px-2 py-1 text-blue-500 dark:border-blue-600 dark:text-blue-600">
                 <TrendingUp size={18} /> 19%
               </span>
@@ -99,12 +95,12 @@ import {
           </div>
         </div>
   
-        {/* Chart & Sales Section */}
+        {/* Chart & Info Section */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-7">
           {/* Area Chart */}
           <div className="card col-span-1 md:col-span-2 lg:col-span-4">
             <div className="card-header">
-              <p className="card-title">Overview</p>
+              <p className="card-title">Project Overview</p>
             </div>
             <div className="card-body p-0">
               <ResponsiveContainer width="100%" height={300}>
@@ -115,7 +111,7 @@ import {
                       <stop offset="95%" stopColor="#2563eb" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <Tooltip cursor={false} formatter={(value) => `$${value}`} />
+                  <Tooltip cursor={false} formatter={(value) => `${value}`} />
                   <XAxis
                     dataKey="name"
                     strokeWidth={0}
@@ -126,7 +122,6 @@ import {
                     dataKey="total"
                     strokeWidth={0}
                     stroke={theme === "light" ? "#475569" : "#94a3b8"}
-                    tickFormatter={(value) => `$${value}`}
                     tickMargin={6}
                   />
                   <Area
@@ -141,10 +136,10 @@ import {
             </div>
           </div>
   
-          {/* Recent Sales */}
+          {/* Upcoming Schedules */}
           <div className="card col-span-1 md:col-span-2 lg:col-span-3">
             <div className="card-header">
-              <p className="card-title">Recent Sales</p>
+              <p className="card-title">Upcoming Schedules</p>
             </div>
             <div className="card-body h-[300px] overflow-auto p-4">
               <p className="text-muted-foreground">Coming soon...</p>
@@ -152,7 +147,7 @@ import {
           </div>
         </div>
   
-        {/* Top Orders Table */}
+        {/* Employees Table - Unchanged */}
         <div className="card">
           <div className="card-header">
             <p className="card-title">Employees</p>
