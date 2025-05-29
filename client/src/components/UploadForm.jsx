@@ -143,40 +143,128 @@ export default function EmployeePhotoUploader() {
   };
 
   return (
-    <div>
-      <h2>Upload Image to ImgBB and Create User</h2>
-
-      <input type="file" accept="image/*" onChange={handleFileChange} />
-      {uploading && <p>Uploading image...</p>}
-      {imageUrl && (
-        <div>
-          <p>Uploaded Image URL:</p>
-          <a href={imageUrl} target="_blank" rel="noopener noreferrer">
-            {imageUrl}
-          </a>
-          <br />
-          <img src={imageUrl} alt="Uploaded" style={{ maxWidth: "300px", marginTop: "10px" }} />
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} style={{ marginTop: 20 }}>
-        <input name="name" placeholder="Name" value={form.name} onChange={handleChange} required />
-        <input name="age" type="number" placeholder="Age" value={form.age} onChange={handleChange} required />
-        <label>
-          Married: 
-          <input name="isMarried" type="checkbox" checked={form.isMarried} onChange={handleChange} />
-        </label>
-        <input name="email" type="email" placeholder="Email" value={form.email} onChange={handleChange} required />
-        <input name="phone" placeholder="Phone" value={form.phone} onChange={handleChange} />
-        <input name="position" placeholder="Position" value={form.position} onChange={handleChange} />
-        <input name="department" placeholder="Department" value={form.department} onChange={handleChange} />
-        <input name="dateOfHire" type="date" placeholder="Date Of Hire" value={form.dateOfHire} onChange={handleChange} />
-        <input name="address" placeholder="Address" value={form.address} onChange={handleChange} />
-        <input name="ssn" placeholder="SSN" value={form.ssn} onChange={handleChange} />
-        <input name="bankAccount" placeholder="Bank Account" value={form.bankAccount} onChange={handleChange} />
-
-        <button type="submit" disabled={uploading}>Create User</button>
-      </form>
-    </div>
+    <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-lg">
+    <h2 className="text-2xl font-bold mb-4 text-black">Upload Image for Employee ID</h2>
+  
+    <input
+      type="file"
+      accept="image/*"
+      onChange={handleFileChange}
+      className="mb-4 block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#00FF9F]"
+    />
+  
+    {uploading && <p className="text-sm text-gray-500 mb-4">Uploading image...</p>}
+  
+    {imageUrl && (
+      <div className="mb-6">
+        <p className="text-sm text-black">Employee Id Photo:</p>
+      
+        <img src={imageUrl} alt="Uploaded" className="mt-2 max-w-xs rounded-lg border border-gray-300" />
+      </div>
+    )}
+  
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input
+          name="name"
+          placeholder="Name"
+          value={form.name}
+          onChange={handleChange}
+          required
+          className="input-field"
+        />
+        <input
+          name="age"
+          type="number"
+          placeholder="Age"
+          value={form.age}
+          onChange={handleChange}
+          required
+          className="input-field"
+        />
+        <input
+          name="email"
+          type="email"
+          placeholder="Email"
+          value={form.email}
+          onChange={handleChange}
+          required
+          className="input-field"
+        />
+        <input
+          name="phone"
+          placeholder="Phone"
+          value={form.phone}
+          onChange={handleChange}
+          className="input-field"
+        />
+        <input
+          name="position"
+          placeholder="Position"
+          value={form.position}
+          onChange={handleChange}
+          className="input-field"
+        />
+        <input
+          name="department"
+          placeholder="Department"
+          value={form.department}
+          onChange={handleChange}
+          className="input-field"
+        />
+        <label htmlFor="dateOfHire" className="block text-sm font-medium text-black mb-1">
+    Date of Hire
+  </label>
+        <input
+          name="dateOfHire"
+          type="date"
+          value={form.dateOfHire}
+          onChange={handleChange}
+          className="input-field"
+        />
+        <input
+          name="address"
+          placeholder="Address"
+          value={form.address}
+          onChange={handleChange}
+          className="input-field"
+        />
+        <input
+          name="ssn"
+          placeholder="SSN"
+          value={form.ssn}
+          onChange={handleChange}
+          className="input-field"
+        />
+        <input
+          name="bankAccount"
+          placeholder="Bank Account"
+          value={form.bankAccount}
+          onChange={handleChange}
+          className="input-field"
+        />
+      </div>
+  
+      <label className="flex items-center space-x-2 text-black">
+        <input
+          name="isMarried"
+          type="checkbox"
+          checked={form.isMarried}
+          onChange={handleChange}
+          className="accent-[#00FF9F]"
+        />
+        <span>Married</span>
+      </label>
+  
+      <button
+        type="submit"
+        disabled={uploading}
+        className="w-full bg-black text-[#00FF9F] font-bold py-2 px-4 rounded hover:bg-[#00FF9F] hover:text-black transition duration-300 disabled:opacity-50"
+      >
+        Create User
+      </button>
+    </form>
+  </div>
+  
   );
 }
