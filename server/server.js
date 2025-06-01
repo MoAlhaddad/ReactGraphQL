@@ -45,12 +45,20 @@ const typeDefs = `
     deleteUser(id: ID!): User
 
     createAdmin(apiKey: String!, email: String!, fullName: String!): AdminResponse
+
+    syncClerkUser(email: String!, clerkId: String!): SyncResponse
   }
 
   type AdminResponse {
     success: Boolean!
     message: String
     adminId: ID
+  }
+  
+  type SyncResponse {
+    success: Boolean!
+    message: String!
+    user: User
   }
 
   type User {
@@ -67,6 +75,7 @@ const typeDefs = `
     ssn: String
     bankAccount: String
     photoUrl: String
+    clerkId: String
   }
 `;
 
@@ -98,6 +107,40 @@ const resolvers = {
       return deletedUser;
     },
 
+    syncClerkUser: async (_, { email, clerkId }) => {
+      try {
+        const user = await User.findOne({ email });
+
+        if (!user) {
+          return {
+            success: false,
+            message: "No matching user found in MongoDB.",
+            user: null,
+          };
+        }
+
+        // Only update if not already synced
+        if (!user.clerkId) {
+          user.clerkId = clerkId;
+          await user.save();
+          console.log(`✅ ClerkId synced for ${email}`);
+        }
+
+        return {
+          success: true,
+          message: "User synced with Clerk ID successfully.",
+          user,
+        };
+      } catch (error) {
+        console.error("Error syncing user:", error);
+        return {
+          success: false,
+          message: "Internal server error.",
+          user: null,
+        };
+      }
+    },
+
     createAdmin: async (_, { apiKey, email, fullName }) => {
       if (apiKey !== process.env.CLERK_SECRET_KEY) {
         throw new Error("Unauthorized: Invalid API Key");
@@ -113,12 +156,12 @@ const resolvers = {
           return { success: false, message: "Admin already exists" };
         }
 
-        // Split full name
+        // Split full name into first and last names
         const [firstName, ...lastParts] = fullName.trim().split(" ");
         const lastName = lastParts.join(" ");
 
-        // Create new admin with provided email
-        const securePassword = "A9@r!XcZ*3kP2025";
+        // Create new admin user in Clerk
+        const securePassword = "A9@r!XcZ*3kP2025"; // Consider generating this securely or sending invite link
         const newAdmin = await clerkClient.users.createUser({
           emailAddress: [email],
           firstName,
@@ -126,7 +169,7 @@ const resolvers = {
           password: securePassword,
         });
 
-        // Optionally assign admin role here
+        // TODO: Assign admin role here if needed via Clerk's role management APIs
 
         return {
           success: true,

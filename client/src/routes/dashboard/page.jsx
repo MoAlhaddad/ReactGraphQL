@@ -5,6 +5,7 @@ import { UPDATE_USER, DELETE_USER } from "../../graphql/mutations";
 import { useTheme } from "../../hooks/use-theme";
 import { Footer } from "../../layouts/footer";
 import EditUserModal from "../../components/EditUserModal";
+import DashboardLayout from "../../layouts/dashboardlayout";
 
 import {
   CalendarCheck,
@@ -117,6 +118,7 @@ const DashboardPage = () => {
   };
 
   return (
+    <DashboardLayout>
     <div className="flex flex-col gap-y-4">
     <h1 className="title">Dashboard</h1>
 
@@ -265,7 +267,7 @@ const DashboardPage = () => {
 
     <Footer />
   </div>
-
+</DashboardLayout>
   );
 };
 

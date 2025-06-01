@@ -21,6 +21,7 @@
     "mongodb": "^6.16.0",
     "mongoose": "^8.15.0",
     "multer": "^2.0.0",
+    "node-fetch": "^3.3.2",
     "uploadthing": "^5.7.4"
   }
 }
