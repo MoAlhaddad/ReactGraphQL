@@ -104,24 +104,33 @@ export const resolvers = {
         };
       }
     },
+
     createSchedule: async (_, { clerkId, weekStart, weekEnd, shifts, tasks }) => {
-        const newSchedule = new Schedule({
-          clerkId,
-          weekStart: new Date(weekStart), // Convert string/timestamp to Date
-          weekEnd: new Date(weekEnd), 
-          shifts,
-          tasks,
-        });
-      
-        await newSchedule.save();
-        console.log("✅ Schedule created for clerkId:", clerkId);
-        return newSchedule;
-      },
-      
-   
-      deleteSchedule: async (_, { id }) => {
-        const deleted = await Schedule.findByIdAndDelete(id);
-        return deleted;
-      },
+      const newSchedule = new Schedule({
+        clerkId,
+        weekStart: new Date(weekStart), // Convert string/timestamp to Date
+        weekEnd: new Date(weekEnd),
+        shifts,
+        tasks,
+      });
+
+      await newSchedule.save();
+      console.log("✅ Schedule created for clerkId:", clerkId);
+      return newSchedule;
+    },
+
+    deleteSchedule: async (_, { id }) => {
+      const deleted = await Schedule.findByIdAndDelete(id);
+      return deleted;
+    },
+  },
+
+  // Add these to map _id to id for nested Shift and Task types:
+  Shift: {
+    id: (shift) => shift._id.toString(),
+  },
+
+  Task: {
+    id: (task) => task._id.toString(),
   },
 };

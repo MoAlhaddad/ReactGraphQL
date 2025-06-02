@@ -1,6 +1,4 @@
-
-import {useQuery, useMutation, gql} from "@apollo/client";
-
+import { useQuery, useMutation, gql } from "@apollo/client";
 
 export const CREATE_USER = gql`
   mutation CreateUser(
@@ -39,31 +37,30 @@ export const CREATE_USER = gql`
 `;
 
 export const GET_USERS = gql`
-query getUsers {
-  getUsers {
-    id
-    age,
-    name,
-    isMarried,
-    position,
-    photoUrl
+  query getUsers {
+    getUsers {
+      id
+      age
+      name
+      isMarried
+      position
+      photoUrl
+    }
   }
-}
+`;
 
-`
 export const GET_USER = gql`
-query getUserById($id: ID!) {
-  getUserById(id: $id) {
-    id
-    age
-    name
-    isMarried
-    position
-    photoUrl
+  query getUserById($id: ID!) {
+    getUserById(id: $id) {
+      id
+      age
+      name
+      isMarried
+      position
+      photoUrl
+    }
   }
-}`
-;
-
+`;
 
 export const UPDATE_USER = gql`
   mutation UpdateUser(
@@ -108,6 +105,56 @@ export const DELETE_USER = gql`
     deleteUser(id: $id) {
       id
       name
+    }
+  }
+`;
+
+// ------------------- SCHEDULE QUERIES -------------------
+
+export const GET_SCHEDULES = gql`
+  query GetSchedules($clerkId: String!) {
+    getSchedules(clerkId: $clerkId) {
+      id
+      clerkId
+      weekStart
+      weekEnd
+      createdAt
+      updatedAt
+      shifts {
+        id
+        date
+        startTime
+        endTime
+        totalHours
+      }
+      tasks {
+        id
+        title
+        description
+        isCompleted
+      }
+    }
+  }
+`;
+
+export const GET_SCHEDULE_BY_ID = gql`
+  query GetScheduleById($id: ID!) {
+    getScheduleById(id: $id) {
+      id
+      clerkId
+      weekStart
+      weekEnd
+      shifts {
+        date
+        startTime
+        endTime
+        totalHours
+      }
+      tasks {
+        title
+        description
+        isCompleted
+      }
     }
   }
 `;

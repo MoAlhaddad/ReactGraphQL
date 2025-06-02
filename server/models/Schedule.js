@@ -15,6 +15,7 @@ const ScheduleSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // add this
     weekStart: {
       type: Date,
       required: true,

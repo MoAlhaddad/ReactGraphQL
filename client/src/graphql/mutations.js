@@ -84,3 +84,62 @@ export const DELETE_USER = gql`
     }
   }
 `;
+
+
+// ------------------- SCHEDULE MUTATIONS -------------------
+
+export const CREATE_SCHEDULE = gql`
+  mutation CreateSchedule(
+    $clerkId: String!
+    $weekStart: String!
+    $weekEnd: String!
+    $shifts: [ShiftInput!]!
+    $tasks: [TaskInput!]!
+  ) {
+    createSchedule(
+      clerkId: $clerkId
+      weekStart: $weekStart
+      weekEnd: $weekEnd
+      shifts: $shifts
+      tasks: $tasks
+    ) {
+      id
+      clerkId
+      weekStart
+      weekEnd
+    }
+  }
+`;
+
+export const UPDATE_SCHEDULE = gql`
+  mutation UpdateSchedule(
+    $id: ID!
+    $clerkId: String
+    $weekStart: String
+    $weekEnd: String
+    $shifts: [ShiftInput!]
+    $tasks: [TaskInput!]
+  ) {
+    updateSchedule(
+      id: $id
+      clerkId: $clerkId
+      weekStart: $weekStart
+      weekEnd: $weekEnd
+      shifts: $shifts
+      tasks: $tasks
+    ) {
+      id
+      clerkId
+      weekStart
+      weekEnd
+    }
+  }
+`;
+
+export const DELETE_SCHEDULE = gql`
+  mutation DeleteSchedule($id: ID!) {
+    deleteSchedule(id: $id) {
+      id
+    }
+  }
+`;

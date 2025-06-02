@@ -76,18 +76,7 @@ export const typeDefs = `
     clerkId: String
   }
 
-  type Task {
-  title: String
-  description: String
-  isCompleted: Boolean
-}
 
-type Shift {
-  date: String
-  startTime: String
-  endTime: String
-  totalHours: Float
-}
 
 type Schedule {
   id: ID
@@ -113,6 +102,21 @@ extend type Mutation {
     shifts: [ShiftInput]
     tasks: [TaskInput]
   ): Schedule
+}
+
+type Shift {
+  id: ID!
+  date: String
+  startTime: String
+  endTime: String
+  totalHours: Int
+}
+
+type Task {
+  id: ID!
+  title: String
+  description: String
+  isCompleted: Boolean
 }
 
 input ShiftInput {
