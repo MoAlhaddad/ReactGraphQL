@@ -91,7 +91,7 @@ type Schedule {
 }
 
 extend type Query {
-  getSchedules(clerkId: String!): [Schedule]
+  getSchedules(clerkId: String): [Schedule]
   getScheduleById(id: ID!): Schedule
 }
 

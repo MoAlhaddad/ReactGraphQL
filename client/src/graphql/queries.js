@@ -114,32 +114,26 @@ export const DELETE_USER = gql`
 // ------------------- SCHEDULE QUERIES -------------------
 
 export const GET_SCHEDULES = gql`
-  query GetSchedules($clerkId: String!) {
-  getSchedules(clerkId: $clerkId) {
+  query GetSchedules {
+  getSchedules {
     id
-    clerkId
     weekStart
     weekEnd
+    user {
+      name
+      email
+      photoUrl
+    }
     shifts {
       id
       date
       startTime
       endTime
-      totalHours
     }
     tasks {
       id
       title
       description
-      isCompleted
-    }
-    user {
-      id
-      name
-      photoUrl
-      email
-      position
-      department
     }
   }
 }
