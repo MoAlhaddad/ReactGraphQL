@@ -179,7 +179,11 @@ const SetUpSchedulePage = () => {
                     filteredUsers.map((user, index) => (
                       <tr key={user.id} className="table-row">
                         <td className="table-cell">{index + 1}</td>
-                        <td className="table-cell">{user.name}</td>
+                        <td className="table-cell"><img
+                        src={user.photoUrl}
+                        alt={user.name}
+                        className="h-8 w-8 rounded-full object-cover"
+                      />{user.name}</td>
                         <td className="table-cell">{user.position}</td>
                         <td className="table-cell">
                           <button

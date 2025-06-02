@@ -9,12 +9,6 @@ import PropTypes from "prop-types";
 // Admin nav items
 const ADMIN_NAV_ITEMS = [
   {
-    title: "Dashboard",
-    links: [
-      { label: "Employee Schedule", icon: ClipboardCheck, path: "/dashboard" },
-    ],
-  },
-  {
     title: "Employees",
     links: [
       { label: "Add Employee", icon: UserPlus, path: "/new-employee" },
@@ -36,13 +30,12 @@ const ADMIN_NAV_ITEMS = [
 // Employee nav items
 const EMPLOYEE_NAV_ITEMS = [
   {
-    title: "Dashboard",
+    title: "Schedule",
     links: [
-      { label: "My Schedule", icon: ClipboardCheck, path: "/dashboard" },
+      { label: "My Schedule", icon: ClipboardCheck, path: "/my-schedule" },
     ],
   },
 ];
-
 import { ClipboardCheck, UserPlus } from "lucide-react";
 
 export const Sidebar = forwardRef(({ collapsed }, ref) => {

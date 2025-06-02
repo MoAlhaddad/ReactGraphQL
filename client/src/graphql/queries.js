@@ -114,29 +114,29 @@ export const DELETE_USER = gql`
 // ------------------- SCHEDULE QUERIES -------------------
 
 export const GET_SCHEDULES = gql`
-  query GetSchedules {
-  getSchedules {
-    id
-    weekStart
-    weekEnd
-    user {
-      name
-      email
-      photoUrl
-    }
-    shifts {
+  query GetSchedules($clerkId: String) {
+    getSchedules(clerkId: $clerkId) {
       id
-      date
-      startTime
-      endTime
-    }
-    tasks {
-      id
-      title
-      description
+      weekStart
+      weekEnd
+      user {
+        name
+        email
+        photoUrl
+      }
+      shifts {
+        id
+        date
+        startTime
+        endTime
+      }
+      tasks {
+        id
+        title
+        description
+      }
     }
   }
-}
 `;
 
 export const GET_SCHEDULE_BY_ID = gql`
@@ -156,6 +156,33 @@ export const GET_SCHEDULE_BY_ID = gql`
         title
         description
         isCompleted
+      }
+    }
+  }
+`;
+
+export const GET_USER_SCHEDULES = gql`
+  query GetSchedulesByClerkId($clerkId: String!) {
+    getSchedulesByClerkId(clerkId: $clerkId) {
+      id
+      weekStart
+      weekEnd
+      user {
+        name
+        email
+        photoUrl
+        clerkId
+      }
+      shifts {
+        id
+        date
+        startTime
+        endTime
+      }
+      tasks {
+        id
+        title
+        description
       }
     }
   }

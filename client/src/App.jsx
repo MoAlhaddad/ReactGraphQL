@@ -6,6 +6,7 @@ import DashboardPage from "./routes/dashboard/page";
 import NewEmployeePage from "./routes/new-employee/page";
 import SetUpSchedulePage from "./routes/set-up-schedule/page";
 import SchedulePage from "./routes/schedule/page";
+import MySchedulePage from "./routes/my-schedule/page";
 
 function App() {
     const router = createBrowserRouter([
@@ -22,6 +23,10 @@ function App() {
                     element: <SetUpSchedulePage />,
                 },
                   {
+                    path: "/my-schedule",  // <-- new route here
+                    element: <MySchedulePage />,
+                },
+                 {
                     path: "schedule",  // <-- new route here
                     element: <SchedulePage />,
                 },
