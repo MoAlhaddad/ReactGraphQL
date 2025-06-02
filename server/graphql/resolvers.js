@@ -4,32 +4,53 @@ import { clerkClient } from "@clerk/clerk-sdk-node";
 
 export const resolvers = {
   Query: {
-    getUsers: async () => await User.find(),
-    getUserById: async (_, { id }) => await User.findById(id),
-    getSchedules: async () => await Schedule.find().populate("user"),
-    getScheduleByUser: async (_, { userId }) =>
-      await Schedule.find({ user: userId }).populate("user"),
+    getUsers: async () => {
+      const users = await User.find();
+      return users.map((user) => ({
+        ...user.toObject(),
+        id: user._id.toString(),
+        clerkId: user.clerkId || null, // Ensure clerkId is returned
+      }));
+    },
+
+    getUserById: async (_, { id }) => {
+      const user = await User.findById(id);
+      return user ? { ...user.toObject(), id: user._id.toString() } : null;
+    },
+
+    getSchedules: async (_, { clerkId }) => {
+      if (clerkId) {
+        return await Schedule.find({ clerkId });
+      }
+      return await Schedule.find();
+    },
+
+    getScheduleByUser: async (_, { userId }) => {
+      const user = await User.findById(userId);
+      if (!user) return [];
+      return await Schedule.find({ clerkId: user.clerkId });
+    },
   },
 
   Mutation: {
     createUser: async (_, args) => {
       const newUser = new User({ ...args });
       await newUser.save();
-      console.log("New user created:", newUser);
+      console.log("✅ New user created:", newUser);
       return newUser;
     },
 
     updateUser: async (_, { id, ...updateFields }) => {
       const updatedUser = await User.findByIdAndUpdate(id, updateFields, { new: true });
       if (!updatedUser) throw new Error("User not found");
-      console.log("User updated:", updatedUser);
+      console.log("✅ User updated:", updatedUser);
       return updatedUser;
     },
 
     deleteUser: async (_, { id }) => {
       const deletedUser = await User.findByIdAndDelete(id);
       if (!deletedUser) throw new Error("User not found");
-      console.log("User deleted:", deletedUser);
+      console.log("❌ User deleted:", deletedUser);
       return deletedUser;
     },
 
@@ -48,7 +69,7 @@ export const resolvers = {
         if (!user.clerkId) {
           user.clerkId = clerkId;
           await user.save();
-          console.log(`✅ ClerkId synced for ${email}`);
+          console.log(`🔁 ClerkId synced for ${email}`);
         }
 
         return {
@@ -83,7 +104,7 @@ export const resolvers = {
         const [firstName, ...lastParts] = fullName.trim().split(" ");
         const lastName = lastParts.join(" ");
 
-        const securePassword = "A9@r!XcZ*3kP2025"; // Consider better security
+        const securePassword = "A9@r!XcZ*3kP2025"; // Consider storing securely
         const newAdmin = await clerkClient.users.createUser({
           emailAddress: [email],
           firstName,
@@ -106,9 +127,13 @@ export const resolvers = {
     },
 
     createSchedule: async (_, { clerkId, weekStart, weekEnd, shifts, tasks }) => {
+      if (!clerkId || !weekStart || !weekEnd || !Array.isArray(shifts) || !Array.isArray(tasks)) {
+        throw new Error("All required schedule fields must be provided.");
+      }
+
       const newSchedule = new Schedule({
         clerkId,
-        weekStart: new Date(weekStart), // Convert string/timestamp to Date
+        weekStart: new Date(weekStart),
         weekEnd: new Date(weekEnd),
         shifts,
         tasks,
@@ -125,7 +150,12 @@ export const resolvers = {
     },
   },
 
-  // Add these to map _id to id for nested Shift and Task types:
+  Schedule: {
+    user: async (schedule) => {
+      return await User.findOne({ clerkId: schedule.clerkId });
+    },
+  },
+
   Shift: {
     id: (shift) => shift._id.toString(),
   },

@@ -1,25 +1,8 @@
-import {
-    Area,
-    AreaChart,
-    ResponsiveContainer,
-    Tooltip,
-    XAxis,
-    YAxis,
-  } from "recharts";
-  import { useQuery } from "@apollo/client";
-  import { GET_USERS } from "../../graphql/queries";
-  import { useTheme } from "../../hooks/use-theme";
+
   import { Footer } from "../../layouts/footer";
-  import { generateUploadButton } from "@uploadthing/react";
   
-  import {
-    CalendarCheck,
-    ClipboardList,
-    UserCog,
-    PencilLine,
-    Trash,
-    TrendingUp,
-  } from "lucide-react";
+  
+
 import EmployeePhotoUploader from "../../components/UploadForm";
   
   const NewEmployeePage = () => {

@@ -87,6 +87,7 @@ type Schedule {
   tasks: [Task]
   createdAt: String
   updatedAt: String
+  user: User
 }
 
 extend type Query {

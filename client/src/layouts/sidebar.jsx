@@ -24,6 +24,12 @@ const ADMIN_NAV_ITEMS = [
   {  title: "Schedule",
     links: [
     { label: "Set Up Schedule", icon: ClipboardCheck, path: "/set-up-schedule" },
+
+    ]},
+     {  title: "Schedule",
+    links: [
+    { label: "This Weeks Schedule", icon: ClipboardCheck, path: "/schedule" },
+    
     ]}
 ];
 

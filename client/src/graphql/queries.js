@@ -45,9 +45,11 @@ export const GET_USERS = gql`
       isMarried
       position
       photoUrl
+      clerkId  # ✅ Now you’re requesting it
     }
   }
 `;
+
 
 export const GET_USER = gql`
   query getUserById($id: ID!) {
@@ -113,28 +115,34 @@ export const DELETE_USER = gql`
 
 export const GET_SCHEDULES = gql`
   query GetSchedules($clerkId: String!) {
-    getSchedules(clerkId: $clerkId) {
+  getSchedules(clerkId: $clerkId) {
+    id
+    clerkId
+    weekStart
+    weekEnd
+    shifts {
       id
-      clerkId
-      weekStart
-      weekEnd
-      createdAt
-      updatedAt
-      shifts {
-        id
-        date
-        startTime
-        endTime
-        totalHours
-      }
-      tasks {
-        id
-        title
-        description
-        isCompleted
-      }
+      date
+      startTime
+      endTime
+      totalHours
+    }
+    tasks {
+      id
+      title
+      description
+      isCompleted
+    }
+    user {
+      id
+      name
+      photoUrl
+      email
+      position
+      department
     }
   }
+}
 `;
 
 export const GET_SCHEDULE_BY_ID = gql`
