@@ -148,6 +148,23 @@ export const resolvers = {
       const deleted = await Schedule.findByIdAndDelete(id);
       return deleted;
     },
+    updateSchedule: async (_, { id, clerkId, weekStart, weekEnd, shifts, tasks }) => {
+  const updated = await Schedule.findByIdAndUpdate(
+    id,
+    {
+      ...(clerkId && { clerkId }),
+      ...(weekStart && { weekStart: new Date(weekStart) }),
+      ...(weekEnd && { weekEnd: new Date(weekEnd) }),
+      ...(shifts && { shifts }),
+      ...(tasks && { tasks }),
+    },
+    { new: true }
+  );
+
+  if (!updated) throw new Error("Schedule not found");
+  console.log("🔄 Schedule updated:", updated);
+  return updated;
+},
   },
 
   Schedule: {

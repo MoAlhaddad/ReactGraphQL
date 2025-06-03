@@ -105,6 +105,17 @@ extend type Mutation {
   ): Schedule
 }
 
+extend type Mutation {
+  updateSchedule(
+    id: ID!
+    clerkId: String
+    weekStart: String
+    weekEnd: String
+    shifts: [ShiftInput!]
+    tasks: [TaskInput!]
+  ): Schedule
+}
+
 type Shift {
   id: ID!
   date: String

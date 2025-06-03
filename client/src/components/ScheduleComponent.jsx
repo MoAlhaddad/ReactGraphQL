@@ -1,15 +1,25 @@
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { GET_SCHEDULES } from "../graphql/queries";
-import { Card, Text, Heading, Flex, Separator } from "@radix-ui/themes";
+import { DELETE_SCHEDULE, UPDATE_SCHEDULE } from "../graphql/mutations";
+import {
+  Card,
+  Text,
+  Heading,
+  Flex,
+  Separator,
+  Button,
+} from "@radix-ui/themes";
 import * as Avatar from "@radix-ui/react-avatar";
 import "@radix-ui/themes/styles.css";
+import { useState } from "react";
 
 // Format timestamp to YYYY-MM-DD
 const FormatIso = (timestamp) => {
   const numericTimestamp = Number(timestamp);
-  const date = new Date(numericTimestamp);
+  if (isNaN(numericTimestamp)) return "Invalid Date";
 
-  if (isNaN(date)) return "Invalid Date";
+  const date = new Date(numericTimestamp);
+  if (isNaN(date.getTime())) return "Invalid Date";
 
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -19,7 +29,65 @@ const FormatIso = (timestamp) => {
 };
 
 const ScheduleComponent = () => {
-  const { data, loading, error } = useQuery(GET_SCHEDULES); // 🔧 removed variables
+  const { data, loading, error, refetch } = useQuery(GET_SCHEDULES);
+  const [deleteSchedule, { loading: deleting }] = useMutation(DELETE_SCHEDULE);
+  const [updateSchedule, { loading: updating }] = useMutation(UPDATE_SCHEDULE);
+
+  const [editingSchedule, setEditingSchedule] = useState(null);
+  const [form, setForm] = useState({ weekStart: "", weekEnd: "" });
+
+  const handleDelete = async (id) => {
+    const confirmed = window.confirm("Are you sure you want to delete this schedule?");
+    if (!confirmed) return;
+
+    try {
+      await deleteSchedule({ variables: { id } });
+      await refetch();
+      alert("Schedule deleted.");
+    } catch (err) {
+      console.error(err);
+      alert("Error deleting schedule");
+    }
+  };
+
+  const handleEditClick = (schedule) => {
+    setEditingSchedule(schedule);
+    setForm({
+      weekStart: FormatIso(schedule.weekStart),
+      weekEnd: FormatIso(schedule.weekEnd),
+    });
+  };
+
+  const handleUpdate = async () => {
+    const start = new Date(form.weekStart);
+    const end = new Date(form.weekEnd);
+
+    if (isNaN(start) || isNaN(end)) {
+      alert("Please enter valid dates.");
+      return;
+    }
+
+    if (start > end) {
+      alert("End date must be after start date.");
+      return;
+    }
+
+    try {
+      await updateSchedule({
+        variables: {
+          id: editingSchedule.id,
+          weekStart: start.getTime().toString(),
+          weekEnd: end.getTime().toString(),
+        },
+      });
+      setEditingSchedule(null);
+      await refetch();
+      alert("Schedule updated!");
+    } catch (err) {
+      console.error(err);
+      alert("Error updating schedule");
+    }
+  };
 
   if (loading) return <Text>Loading schedules...</Text>;
   if (error) return <Text color="red">Error loading schedules: {error.message}</Text>;
@@ -92,8 +160,40 @@ const ScheduleComponent = () => {
           ) : (
             <Text size="2" color="gray">No tasks assigned.</Text>
           )}
+
+          <Flex gap="2" mt="4">
+            <Button onClick={() => handleEditClick(schedule)} disabled={updating || deleting}>Edit</Button>
+            <Button color="red" onClick={() => handleDelete(schedule.id)} disabled={deleting || updating}>Delete</Button>
+          </Flex>
         </Card>
       ))}
+
+      {/* Modal */}
+      {editingSchedule && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
+          <Card size="4" className="bg-white w-full max-w-sm mx-auto rounded-lg p-6 shadow-xl">
+            <Heading size="4" mb="3">Edit Schedule</Heading>
+            <Flex direction="column" gap="3">
+              <input
+                type="date"
+                value={form.weekStart}
+                onChange={(e) => setForm({ ...form, weekStart: e.target.value })}
+                className="px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full"
+              />
+              <input
+                type="date"
+                value={form.weekEnd}
+                onChange={(e) => setForm({ ...form, weekEnd: e.target.value })}
+                className="px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full"
+              />
+              <Flex gap="2" mt="3">
+                <Button onClick={handleUpdate} disabled={updating}>Save</Button>
+                <Button color="gray" onClick={() => setEditingSchedule(null)} disabled={updating}>Cancel</Button>
+              </Flex>
+            </Flex>
+          </Card>
+        </div>
+      )}
     </Flex>
   );
 };
